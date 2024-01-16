@@ -11,13 +11,13 @@ def portfolio_cost(filename):
     next(f)
 
     total_cost = 0.00
-    for line in lines:
+    for lineno, line in enumerate(lines):
         try:
             shares = float(line[1])
             price = float(line[2])
             total_cost = total_cost + (shares * price)
         except ValueError:
-            print(f'Could not process file data: {line}')
+            print(f'Could not process file data on line {lineno}: {line}')
             continue
 
     f.close()
