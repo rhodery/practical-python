@@ -5,22 +5,22 @@ import csv
 import sys
 
 def portfolio_cost(filename):
-    f = open(filename, 'rt')
-    lines = csv.reader(f)
-    # skip headers
-    next(f)
+    with open(filename, 'rt') as f:
+        lines = csv.reader(f)
+        headers = next(lines)
 
-    total_cost = 0.00
-    for lineno, line in enumerate(lines):
-        try:
-            shares = float(line[1])
-            price = float(line[2])
-            total_cost = total_cost + (shares * price)
-        except ValueError:
-            print(f'Could not process file data on line {lineno}: {line}')
-            continue
+        total_cost = 0.00
+        for lineno, line in enumerate(lines, start=1):
+            record = dict(zip(headers, line))
+            try:
+                shares = int(record['shares'])
+                price = float(record['price'])
+                total_cost += shares * price
+            except ValueError:
+                print(f'Line {lineno}: Bad row: {line}')
+                continue
 
-    f.close()
+        #f.close()
     return total_cost
 
 if len(sys.argv) == 2:
